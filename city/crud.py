@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
-from db.models import CityModel
-from schemas.cities import CityCreateSchema
+from city.models import CityModel
+from city.schemas import CityCreateSchema
 
 
 def get_all_cities(db: Session, skip: int = 0, limit: int = 10):

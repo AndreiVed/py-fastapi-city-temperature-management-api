@@ -1,20 +1,12 @@
-from fastapi import FastAPI, Depends, Query, HTTPException, APIRouter
+from fastapi import Depends, Query, HTTPException, APIRouter
 from sqlalchemy.orm import Session
 from starlette import status
 
-from crud import cities as city_crud
-from db.database import SessionLocal
-from schemas.cities import CityListSchema, CityRetrieveSchema, CityCreateSchema, CityUpdateSchema
+from city import crud as city_crud
+from city.schemas import CityListSchema, CityRetrieveSchema, CityCreateSchema, CityUpdateSchema
+from dependencies import get_db
 
 router = APIRouter()
-
-
-def get_db() -> Session:
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @router.get("/cities/", response_model=CityListSchema)
