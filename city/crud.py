@@ -1,35 +1,43 @@
-from sqlalchemy.orm import Session
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from city.models import CityModel
 from city.schemas import CityCreateSchema
 
 
-def get_all_cities(db: Session, skip: int = 0, limit: int = 10):
-    return db.query(CityModel).offset(skip).limit(limit).all()
+async def get_all_cities(db: AsyncSession, skip: int = 0, limit: int = 10):
+    result = await db.execute(
+        select(CityModel).offset(skip).limit(limit).order_by(CityModel.id.desc())
+    )
+    cities = result.scalars().all()
+    return cities
 
 
-def get_total_cities_count(db: Session):
-    return db.query(CityModel).count()
+async def get_total_cities_count(db: AsyncSession):
+    result = await db.execute(select(CityModel))
+    return len(result.all())
 
 
-def get_city_by_id(db: Session, city_id: int):
-    city = db.query(CityModel).filter(CityModel.id==city_id).first()
+async def get_city_by_id(db: AsyncSession, city_id: int):
+    result = await db.execute(select(CityModel).where(CityModel.id==city_id))
+    city = result.scalar_one_or_none()
     return city
 
 
-def get_city_by_name(db: Session, city_name: str):
-    city = db.query(CityModel).filter(CityModel.name==city_name).first()
+async def get_city_by_name(db: AsyncSession, city_name: str):
+    result = await db.execute(select(CityModel).where(CityModel.name==city_name))
+    city = result.scalar_one_or_none()
     return city
 
 
-def create_city(db: Session, city_data: CityCreateSchema):
+async def create_city(db: AsyncSession, city_data: CityCreateSchema):
     db_author = CityModel(
         name=city_data.name,
         additional_info=city_data.additional_info,
     )
 
     db.add(db_author)
-    db.commit()
-    db.refresh(db_author)
+    await db.commit()
+    await db.refresh(db_author)
 
     return db_author
