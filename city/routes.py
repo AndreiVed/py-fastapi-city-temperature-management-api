@@ -77,8 +77,8 @@ async def delete_movie(city_id: int, db: AsyncSession = Depends(get_db)):
     return {"detail": "City deleted successfully."}
 
 
-@router.patch("/movies/{movie_id}/")
-async def update_movie(
+@router.patch("/cities/{city_id}")
+async def update_city(
     city_id: int,
     city_data: CityUpdateSchema,
     db: AsyncSession = Depends(get_db),

@@ -41,3 +41,10 @@ async def create_city(db: AsyncSession, city_data: CityCreateSchema):
     await db.refresh(db_author)
 
     return db_author
+
+
+async def get_cities(db: AsyncSession):
+    result = await db.execute(select(CityModel))
+    cities = result.scalars().all()
+
+    return cities
