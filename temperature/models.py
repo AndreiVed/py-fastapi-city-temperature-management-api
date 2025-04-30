@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 
-from sqlalchemy import Column, Float, Integer, DateTime, ForeignKey
+from sqlalchemy import Column, Float, Integer, DateTime, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from database import Base
@@ -15,3 +15,7 @@ class TemperatureModel(Base):
     date_time = Column(DateTime, nullable=False, default=datetime.now(timezone.utc))
 
     city = relationship("CityModel", back_populates="temperatures")
+
+    __table_args__ = (
+        UniqueConstraint('city_id', 'date_time', name='uq_city_date_time'),
+    )

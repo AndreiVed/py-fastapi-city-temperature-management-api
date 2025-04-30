@@ -92,3 +92,6 @@ async def create_temperature(
         date_time=datetime.now(timezone.utc)
     )
     db.add(temp)
+    await db.commit()
+    await db.refresh(temp)
+    return temp

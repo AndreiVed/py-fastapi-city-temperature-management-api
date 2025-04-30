@@ -32,6 +32,4 @@ class CityListSchema(BaseModel):
 
 class CityUpdateSchema(BaseModel):
     name: Optional[str] = Field(None, max_length=255)
-    additional_info: Optional[str] = Field(None, max_length=255)
-
-
+    additional_info: Optional[str] = Field(None, max_length=511)

@@ -31,16 +31,16 @@ async def get_city_by_name(db: AsyncSession, city_name: str):
 
 
 async def create_city(db: AsyncSession, city_data: CityCreateSchema):
-    db_author = CityModel(
+    city = CityModel(
         name=city_data.name,
         additional_info=city_data.additional_info,
     )
 
-    db.add(db_author)
+    db.add(city)
     await db.commit()
-    await db.refresh(db_author)
+    await db.refresh(city)
 
-    return db_author
+    return city
 
 
 async def get_cities(db: AsyncSession):

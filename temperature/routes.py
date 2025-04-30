@@ -59,5 +59,4 @@ async def update_temperatures(db: AsyncSession = Depends(get_db)):
                 temperature=temperature
             )
 
-    await db.commit()
     return {"status": "temperatures updated"}

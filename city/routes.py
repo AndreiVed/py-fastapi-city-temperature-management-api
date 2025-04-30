@@ -62,7 +62,7 @@ async def create_city(
 
 
 @router.delete("/cities/{city_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_movie(city_id: int, db: AsyncSession = Depends(get_db)):
+async def delete_city(city_id: int, db: AsyncSession = Depends(get_db)):
     city = await city_crud.get_city_by_id(city_id=city_id, db=db)
 
     if not city:
@@ -84,6 +84,9 @@ async def update_city(
     db: AsyncSession = Depends(get_db),
 ):
     city = await city_crud.get_city_by_id(db, city_id=city_id)
+
+    if not city:
+        raise HTTPException(status_code=404, detail="City not found.")
 
     data_to_update = city_data.model_dump(exclude_unset=True)
     for field, value in data_to_update.items():
