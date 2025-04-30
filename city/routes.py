@@ -74,10 +74,8 @@ async def delete_city(city_id: int, db: AsyncSession = Depends(get_db)):
     await db.delete(city)
     await db.commit()
 
-    return {"detail": "City deleted successfully."}
 
-
-@router.patch("/cities/{city_id}")
+@router.patch("/cities/{city_id}", response_model=CityRetrieveSchema)
 async def update_city(
     city_id: int,
     city_data: CityUpdateSchema,
@@ -93,4 +91,4 @@ async def update_city(
         setattr(city, field, value)
     await db.commit()
     await db.refresh(city)
-    return {"detail": "City updated successfully."}
+    return CityRetrieveSchema.model_validate(city)
